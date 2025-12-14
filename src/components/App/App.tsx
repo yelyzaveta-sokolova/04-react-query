@@ -21,7 +21,7 @@ const App = () => {
     queryKey: ["movies", query, page],
     queryFn: () => fetchMovies(query, page),
     enabled: query !== "",
-    keepPreviousData: true,
+    placeholderData: previousData => previousData,
   });
 
   const movies = data?.results ?? [];
