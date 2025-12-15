@@ -1,16 +1,22 @@
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import { toast } from "react-hot-toast";
 import styles from "./SearchBar.module.css";
 
-interface SearchBarProps {
+export interface SearchBarProps {
   onSubmit: (query: string) => void;
 }
 
-const schema = Yup.object({
-  query: Yup.string().trim().required(),
-});
-
 const SearchBar = ({ onSubmit }: SearchBarProps) => {
+  const handleSubmit = (formData: FormData) => {
+    const query = formData.get("query")?.toString().trim();
+
+    if (!query) {
+      toast.error("Please enter a movie name");
+      return;
+    }
+
+    onSubmit(query);
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -23,26 +29,18 @@ const SearchBar = ({ onSubmit }: SearchBarProps) => {
           Powered by TMDB
         </a>
 
-        <Formik
-          initialValues={{ query: "" }}
-          validationSchema={schema}
-          onSubmit={(values, actions) => {
-            if (!values.query.trim()) return;
-            onSubmit(values.query);
-            actions.resetForm();
-          }}
-        >
-          <Form className={styles.form}>
-            <Field
-              className={styles.input}
-              name="query"
-              placeholder="Search movies..."
-            />
-            <button className={styles.button} type="submit">
-              Search
-            </button>
-          </Form>
-        </Formik>
+        <form className={styles.form} action={handleSubmit}>
+          <input
+            className={styles.input}
+            type="text"
+            name="query"
+            placeholder="Search movies..."
+            autoComplete="off"
+          />
+          <button className={styles.button} type="submit">
+            Search
+          </button>
+        </form>
       </div>
     </header>
   );
