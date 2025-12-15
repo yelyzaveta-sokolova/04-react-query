@@ -49,9 +49,9 @@ const App = () => {
       <SearchBar onSubmit={handleSearch} />
 
       {isLoading && <Loader />}
-      {isError && <ErrorMessage />}
-
-  {isSuccess && data.results.length > 0 && (
+      {isError && (<ErrorMessage text="Failed to fetch movies. Please try again later." />)}
+ 
+{isSuccess && (
   <>
     {data.total_pages > 1 && (
       <ReactPaginate
@@ -67,15 +67,11 @@ const App = () => {
       />
     )}
 
-    <MovieGrid
-      movies={data.results}
-      onSelect={setSelectedMovie}
-    />
+    <MovieGrid movies={data.results} onSelect={setSelectedMovie} />
   </>
 )}
 
 
-  
       {selectedMovie && (
         <MovieModal
           movie={selectedMovie}
@@ -87,3 +83,6 @@ const App = () => {
 };
 
 export default App;
+
+
+
